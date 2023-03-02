@@ -1,4 +1,12 @@
 {% extends 'base.html' %}
-{% block dashboard %}
-    <h1>Hi, what's up user.</h1>
-{% endblock dashboard %}
+{% block main %}
+{% if user.is_authenticated %} 
+<div class="alert alert-success" role="alert">
+    <h4 class="alert-heading">Well done!</h4>
+    <p>Aww yeah, you successfully read this important alert message.</p>
+    <hr>
+    <p class="mb-0">So {{username}}, your successfully login.</p>
+  </div>
+{% endif %} 
+{% endblock main %}
+

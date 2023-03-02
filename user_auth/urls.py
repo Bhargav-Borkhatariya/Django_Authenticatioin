@@ -2,7 +2,8 @@ from user_auth import views
 from django.urls import path
 
 urlpatterns = [
-    path("", views.home, name='login'),
+    path("", views.home, name='home'),
+    path("signin", views.signin, name='signin'),
     path("signup", views.signup, name='signup'),
-    path("dashboard", views.dashboard, name='dashboard'),
+    path("signout", views.signout, name='signout'),
 ]
