@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <title>Home-Page</title>
+</head>
+<body>
+
+    {% if user.is_authenticated %}
+    <h3>Hello {{fname}}!</h3>
+    <h4>You're successfully logged in.</h4>
+    <button type="submit"><a href="/signout">SignOut</a></button>
+    {% else %}
+    <button type="submit"><a href="/signup">SignUp</a></button>
+    <br/>
+    <br/>
+    <button type="submit"><a href="/signin">SignIn</a></button>
+    {% endif %}
+    {% block login %}{% endblock login %}
+    {% block signup %}{% endblock signup %}
+    {% block dashboard %}{% endblock dashboard %}
+</body>
+</html>
