@@ -1,5 +1,9 @@
-{% extends 'base.html' %}
+{% comment %} Extend the base file show we can run the our block in that file.{% endcomment %}
+{% extends 'base.html' %} 
+
 {% block main %}
+
+{% comment %} This file show the content when users are authorized. {% endcomment %}
 {% if user.is_authenticated %} 
 <div class="alert alert-success" role="alert">
     <h4 class="alert-heading">Well done!</h4>
@@ -8,5 +12,6 @@
     <p class="mb-0">So {{username}}, your successfully login.</p>
   </div>
 {% endif %} 
+
 {% endblock main %}
 

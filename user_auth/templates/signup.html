@@ -1,57 +1,71 @@
 {% extends 'base.html' %}
 {% block main %}
-  <section class="vh-80" style="background-color: #ADD8E6;">
-      <div class="container h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-          <div class="col-lg-12 col-xl-11">
-            <div class="card text-black mw-auto" style="border-radius: 25px;">
-              <div class="card-body">
-                <div class="row justify-content-center">
-                  <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
-                    <p class="text-center h1 fw-bold">Sign up</p>
-                    <form method="post" action="{% url 'signup' %}">
-                      {% csrf_token %}
-                      <div class="form-group">
-                          <label for="username">Username</label><br>
-                          <input type="text" class="form-control" id="username" name="username" placeholder="Create A Username (use only letters and numbers)" Required>
-                      </div><br>
-                      <div class="form-group">
-                          <label for="fname">First Name</label><br>
-                          <input type="text" class="form-control" id="fname" name="fname" placeholder="Enter Your First Name" Required>
-                      </div><br>
-                      <div class="form-group">
-                          <label for="lname">Last Name</label><br>
-                          <input type="text" class="form-control" id="lname" name="lname" placeholder="Enter Your Last Name" Required>
-                      </div><br>
-                      <div class="form-group">
-                          <label for="email">Email</label>
-                          <br>
-                          <input type="email" class="form-control" id="email" name="email" placeholder="Enter Your Email Address" Required>
-                      </div><br>
-                      <div class="form-group">
-                          <label for="pass1">Password</label>
-                          <br>
-                          <input type="password" class="form-control" id="pass1" name="pass1" placeholder="Create Your Password" Required>
-                      </div><br>
-                      <div class="form-group">
-                          <label for="pass2">Confirm Password</label>
-                          <br>
-                          <input type="password" class="form-control" id="pass2" name="pass2" placeholder="Confirm Your Password" Required>
-                      </div><br>
-                      <button type="submit" class="btn btn-primary">Sign Up</button>
+<section class="vh-80" style="background-color: #ADD8E6;">
+  <div class="container h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-lg-12 col-xl-11">
+        <div class="card text-black mw-auto" style="border-radius: 25px;">
+          <div class="card-body">
+            <div class="row justify-content-center">
+              <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+
+                <p class="text-center h1 fw-bold">Sign up</p>
+                  
+                  <form method="post" action="{% url 'signup' %}" enctype="multipart/form-data">
+                  {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="username">Username</label><br>
+                        <input type="text" value="{{ username }}" class="form-control" id="username" name="username" placeholder="Create A Username (use only letters and numbers)" Required>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="fname">First Name</label><br>
+                      <input type="text" value="{{ fname }}" class="form-control" id="fname" name="fname" placeholder="Enter Your First Name" Required>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="lname">Last Name</label><br>
+                      <input type="text" value="{{ lname }}" class="form-control" id="lname" name="lname" placeholder="Enter Your Last Name" Required>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="email">Email</label>
+                      <input type="email" value="{{ email }}" class="form-control" id="email" name="email" placeholder="Enter Your Email Address" Required>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="pass1">Password</label>                    
+                      <input type="password" class="form-control" id="pass1" name="pass1" placeholder="Create Your Password" Required>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="pass2">Confirm Password</label>  
+                      <input type="password" class="form-control" id="pass2" name="pass2" placeholder="Confirm Your Password" Required>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="image">Upload Image for Dashboard</label>                    
+                      <input type="file" class="form-control" id="image" name="image">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Sign Up</button>
+
                   </form>
                   </div>
+
                   <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
-    
                     <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
                       class="img-fluid" alt="Sample image">
-    
                   </div>
-                </div>
+                  
               </div>
             </div>
           </div>
         </div>
       </div>
-  </section>
+    </div>
+  </div>
+</section>
+
 {% endblock main %}
