@@ -1,17 +1,97 @@
-{% comment %} Extend the base file show we can run the our block in that file.{% endcomment %}
 {% extends 'base.html' %} 
+{% comment %} Extend the base file show we can run the our block in that file.{% endcomment %}
 
 {% block main %}
 
 {% comment %} This file show the content when users are authorized. {% endcomment %}
 {% if user.is_authenticated %} 
-<div class="alert alert-success" role="alert">
-    <h4 class="alert-heading">Well done!</h4>
-    <p>Aww yeah, you successfully read this important alert message.</p>
-    <hr>
-    <p class="mb-0">So {{username}}, your successfully login.</p>
-  </div>
-{% endif %} 
 
+<div class="ml-4 mt-4">
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary jadu" data-toggle="modal" data-target="#Addbook">
+    Add New Book
+  </button>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="Addbook" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Book</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form method="post" enctype="multipart/form-data" action="{% url 'add_book' %}">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="book-name">Book Name:</label>
+                <input type="text" class="form-control" id="book-name" name="book-name" required>
+              </div>
+    
+              <div class="form-group">
+                <label for="author-name">Author Name:</label>
+                <input type="text" class="form-control" id="author-name" name="author-name" required>
+              </div>
+    
+              <div class="form-group">
+                <label for="book-price">Book Price:</label>
+                <input type="text" class="form-control-file" id="book-price" name="book-price">
+              </div>
+    
+              <div class="form-group">
+                <label for="book-image">Book Image:</label>
+                <input type="file" class="form-control-file" id="book-image" name="book-image">
+              </div>              
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+  </form>
+</div>
+</div>
+</div>
+
+<h1 class="mt-5 bg-light">My Books</h1>
+
+<table class="table table-striped table-bordered table-sm">
+  <thead class="bg-primary">
+    <tr>
+      <th>Name</th>
+      <th>Author</th>
+      <th>Price</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% if books %}
+    {% for book in books %}
+    <tr>
+      <td>{{ book.book_name }}</td>
+      <td>{{ book.book_author }}</td>
+      <td>{{book.book_price}}</td>
+      <td>
+        <div>
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editbook">
+            <a href="{% url 'editbook' book.id %}" class="text-white">Edit</a>
+          </button>
+          
+          <button type="button" class="btn btn-primary">
+            <a href="{% url 'deletebook' book.id %}" class="text-white">Remove</a>
+          </button>
+        </div>
+        </td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+  </tbody>
+</table>
+  
+{% endif %} 
 {% endblock main %}
 

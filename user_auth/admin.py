@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from user_auth.models import CustomUser
+from user_auth.models import CustomUser, Book
 
 
 # Register the user.
@@ -14,3 +14,8 @@ class CustomUserAdmin(UserAdmin):
 
     model = CustomUser
     fieldsets = UserAdmin.fieldsets + ((None, {"fields": ("image",)}),)
+
+
+@admin.register(Book)
+class BookAdmin(admin.ModelAdmin):
+    list_display = ('user', 'book_name', 'book_author', 'book_price')

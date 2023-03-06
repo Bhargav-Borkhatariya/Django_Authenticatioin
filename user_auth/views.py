@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from user_auth.models import CustomUser
+from user_auth.models import CustomUser, Book
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -93,7 +93,7 @@ def signin(request):
         if user is not None:
             login(request, user)
             username = user.username
-            return render(request, "dashboard.html", {"username": username})
+            return redirect("dashboard")
         else:
             messages.error(request, "Bad Credentials!!")
             return redirect("signin")
@@ -101,6 +101,7 @@ def signin(request):
     return render(request, "login.html")
 
 
+@login_required
 def signout(request):
     """
     Here we provide the logou functionality using the inbuilt function,
@@ -110,3 +111,51 @@ def signout(request):
     logout(request)
     messages.success(request, "Logged Out Successfully!!")
     return redirect("signin")
+
+
+@login_required
+def add_book(request):
+    if request.method == 'POST':
+        book = Book(
+            user=request.user,
+            book_name=request.POST['book-name'],
+            book_author=request.POST['author-name'],
+            book_price=request.POST['book-price'],
+            book_image=request.FILES.get('book-image'),
+        )
+        book.save()
+        return redirect('dashboard')
+    else:
+        return render(request, 'dashboard.html')
+    
+
+@login_required
+def edit_book(request, id):
+    Books = Book.objects.get(id=id)
+    if request.method == 'POST':
+        Books = Book(
+            user=request.user,
+            book_name=request.POST['book-name'],
+            book_author=request.POST['author-name'],
+            book_price=request.POST['book-price'],
+            book_image=request.FILES.get('book-image'),
+        )
+        Books.save()
+        return redirect('editbook')
+    else:
+        return render(request, 'dashboard.html')
+
+
+@login_required
+def delete_book(request, id):
+    Books = Book.objects.get(id=id)
+    Books.delete()
+    return redirect('dashboard')
+
+
+@login_required
+def dashboard(request):
+    books = Book.objects.filter(user=request.user)
+    context = {'books': books}
+    return render(request, 'dashboard.html', context)
+
