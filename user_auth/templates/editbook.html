@@ -1,47 +1,65 @@
-{% extends 'base.html' %}
-{% include dashboard.html %}
+{% extends 'dashboard.html' %}
 {% block main %}
 
+{% comment %} Script that trigger when this page load and trigger the editmodal {% endcomment %}
+<script>
+  $(document).ready(function() {
+      $('#myModalBtn').trigger('click');
+  });
+</script>
 
-  <!-- Modal -->
-  <div class="modal fade" id="editbook" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Edit Book Details</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <form method="post" enctype="multipart/form-data" action="{% url 'editbook' book.id %}">
-                {% csrf_token %}
-                <div class="form-group">
-                  <label for="book-name">Book Name:</label>
-                  <input type="text" value="{{book.book_name}}" class="form-control" id="book-name" name="book-name" required>
-                </div>
-      
-                <div class="form-group">
-                  <label for="author-name">Author Name:</label>
-                  <input type="text" value="{{book.book_author}}" class="form-control" id="author-name" name="author-name" required>
-                </div>
-      
-                <div class="form-group">
-                  <label for="book-price">Book Price:</label>
-                  <input type="text" value="{{book.book_price}}" class="form-control-file" id="book-price" name="book-price">
-                </div>
-      
-                <div class="form-group">
-                  <label for="book-image">Book Image:</label>
-                  <input type="file" class="form-control-file" id="book-image" name="book-image">
-                </div>              
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Save changes</button>
-        </div>
-    </form>
-  </div>
-  </div>
-  </div>
-  {% endblock main %}
+<!-- Button trigger modal -->
+<button class="btn btn-primary hide-me" data-toggle="modal" data-target="#editbook" id="myModalBtn">
+</button>
+
+<!-- Modal for edit the book-->
+<div class="modal fade" id="editbook" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Book Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form method="post" enctype="multipart/form-data" action="{% url 'editbook' book_field.id %}">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="book-name">Book Name:</label>
+                <input type="text" value="{{book_field.book_name}}" class="form-control" id="book-name" name="book-name" required>
+              </div>
+    
+              <div class="form-group">
+                <label for="author-name">Author Name:</label>
+                <input type="text" value="{{book_field.book_author}}" class="form-control" id="book-author" name="book-author" required>
+              </div>
+    
+              <div class="form-group">
+                <label for="book-price">Book Price:</label>
+                <input type="text" value="{{book_field.book_price}}" class="form-control-file" id="book-price" name="book-price">
+              </div>
+    
+              <div class="form-group">
+                <label for="book-image">Book Image:</label>
+                <input type="file" value="{{book_field.book_image}}" class="form-control-file" id="book-image" name="book-image">
+              </div>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+  </form>
+</div>
+</div>
+</div>
+
+{% comment %} This script should be after the modal, 
+and that redirect you to the dashboard when close modal close button is click {% endcomment %}
+<script>
+  $('#editbook').on('hidden.bs.modal', function () {
+    window.location.href = '{% url 'dashboard' %}';
+  });
+</script>
+
+{% endblock main %}

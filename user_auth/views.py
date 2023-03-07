@@ -4,9 +4,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
+
 # Create your views here.
-
-
 def home(request):
     """
     Simpel function that redirect te
@@ -36,7 +35,7 @@ def signup(request):
         # that we can fetch in our redirected file.
         if CustomUser.objects.filter(username=username):
             messages.error(
-                request, "Username already exist! Please try some other username."
+                request, "Username already exist!"
             )
 
         if CustomUser.objects.filter(email=email).exists():
@@ -114,48 +113,69 @@ def signout(request):
 
 
 @login_required
+def dashboard(request):
+    """
+    This code render the dashboard page for login user,
+    And send that user model object with dashboard page.
+    """
+    books = Book.objects.filter(user=request.user)
+    context = {"books": books}
+    return render(request, "dashboard.html", context)
+
+
+@login_required
 def add_book(request):
-    if request.method == 'POST':
+    """
+    This function fill the login user model fields.
+    and redirect to the dashboard page.
+    """
+    if request.method == "POST":
         book = Book(
             user=request.user,
-            book_name=request.POST['book-name'],
-            book_author=request.POST['author-name'],
-            book_price=request.POST['book-price'],
-            book_image=request.FILES.get('book-image'),
+            book_name=request.POST["book-name"],
+            book_author=request.POST["author-name"],
+            book_price=request.POST["book-price"],
+            book_image=request.FILES.get("book-image"),
         )
         book.save()
-        return redirect('dashboard')
+        messages.success(request, "Book Add Successfully!!")
+        return redirect("dashboard")
     else:
-        return render(request, 'dashboard.html')
-    
+        return render(request, "dashboard.html")
+
 
 @login_required
 def edit_book(request, id):
-    Books = Book.objects.get(id=id)
-    if request.method == 'POST':
-        Books = Book(
+    """
+    This function update the login user model fields,
+    send the all model data editbook form fields,
+    if request method equal to post either update the fields.
+    """
+    book_fields = Book.objects.get(id=id)
+    if request.method == "POST":
+        books = Book(
             user=request.user,
-            book_name=request.POST['book-name'],
-            book_author=request.POST['author-name'],
-            book_price=request.POST['book-price'],
-            book_image=request.FILES.get('book-image'),
+            book_name=request.POST.get("book-name"),
+            book_author=request.POST.get("book-author"),
+            book_price=request.POST.get("book-price"),
+            book_image=request.FILES.get("book-image"),
         )
-        Books.save()
-        return redirect('editbook')
+        Book.objects.filter(id=id).update(book_name=books.book_name)
+        Book.objects.filter(id=id).update(book_author=books.book_author)
+        Book.objects.filter(id=id).update(book_price=books.book_price)
+        Book.objects.filter(id=id).update(book_image=books.book_image)
+        messages.success(request, "Data Updated Successfully!!")
+        return redirect("dashboard")
     else:
-        return render(request, 'dashboard.html')
+        return render(request, "editbook.html", {"book_field": book_fields})
 
 
 @login_required
 def delete_book(request, id):
+    """
+    Just destroy the particular book all fiel by using its id.
+    """
     Books = Book.objects.get(id=id)
     Books.delete()
-    return redirect('dashboard')
-
-
-@login_required
-def dashboard(request):
-    books = Book.objects.filter(user=request.user)
-    context = {'books': books}
-    return render(request, 'dashboard.html', context)
-
+    messages.success(request, "Book Deleted Succesfully!!")
+    return redirect("dashboard")

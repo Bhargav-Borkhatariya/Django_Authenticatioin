@@ -6,7 +6,18 @@
 {% comment %} This file show the content when users are authorized. {% endcomment %}
 {% if user.is_authenticated %} 
 
-<div class="ml-4 mt-4">
+<div class="ml-4 mt-4 mr-4">
+
+  {% comment %} This is for showing the msg like succeful and errors. {% endcomment %}
+  {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <strong>Message:</strong> {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+  {% endfor %}
+
   <!-- Button trigger modal -->
   <button type="button" class="btn btn-primary jadu" data-toggle="modal" data-target="#Addbook">
     Add New Book
@@ -14,7 +25,7 @@
 </div>
 
 
-<!-- Modal -->
+<!-- Modal for add book-->
 <div class="modal fade" id="Addbook" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -24,6 +35,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      
       <div class="modal-body">
           <form method="post" enctype="multipart/form-data" action="{% url 'add_book' %}">
               {% csrf_token %}
@@ -56,6 +68,7 @@
 </div>
 </div>
 
+{% comment %} Below code is print the user books {% endcomment %}
 <h1 class="mt-5 bg-light">My Books</h1>
 
 <table class="table table-striped table-bordered table-sm">
@@ -76,12 +89,12 @@
       <td>{{book.book_price}}</td>
       <td>
         <div>
-          <!-- Button trigger modal -->
+          {% comment %} Below button redirect you to the editbook with book id {% endcomment %}
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editbook">
             <a href="{% url 'editbook' book.id %}" class="text-white">Edit</a>
           </button>
-          
-          <button type="button" class="btn btn-primary">
+
+          <button type="button" class="btn btn-primary member">
             <a href="{% url 'deletebook' book.id %}" class="text-white">Remove</a>
           </button>
         </div>
@@ -91,6 +104,18 @@
     {% endif %}
   </tbody>
 </table>
+
+{% comment %} Below code for the confirmation on the removing book. {% endcomment %}
+<script>
+  $(document).ready(function() {
+    $('.member').click(function() {
+      if (confirm('Are you sure?')) {
+        var url = $(this).attr('href');
+        $('#content').load(url);
+      }
+    });
+  });
+</script>
   
 {% endif %} 
 {% endblock main %}
