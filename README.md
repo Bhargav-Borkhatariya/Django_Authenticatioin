@@ -16,7 +16,6 @@ Need to file form that have fiels like.
 4. email
 5. password
 6. confirm password
-7. Upload Image.
 
 ## We have validation like.
 
