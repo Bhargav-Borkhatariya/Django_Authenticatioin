@@ -25,6 +25,14 @@
             <form method="post" enctype="multipart/form-data" action="{% url 'changepass' %}">
             {% csrf_token %}
             <div id="error-message" class="alert alert-danger" role="alert" style="display:none;"></div>
+
+            {% comment %} Display Below Div if they error_message have value. {% endcomment %}
+            {% if error_message %}
+            {% for item in error_message %}
+              <div class="alert alert-danger" role="alert" >{{ item }}</div>
+              {% endfor %}
+            {% endif %}
+            
             <div class="form-group">
                 <label for="old_password">Old Password:</label>
                 <input type="password" name="old_password" id="old_password" class="form-control">
