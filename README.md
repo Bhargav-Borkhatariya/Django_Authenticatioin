@@ -2,6 +2,8 @@
 It is a simple authentication that provide login and signup functionality for user.
 
 Functionality like every successful redirect have proper msg for guidance and greeting.
+* You Can Change User Password.
+* Perform CRUD Operations.
 ---
 # Home_Page
 Here you can get the option for signup and sign in navbar.
