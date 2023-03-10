@@ -1,14 +1,19 @@
 {% extends 'base.html' %}
 {% block main %}
-<section class="vh-80" style="background-color: #ADD8E6;">
+<section class="vh-80">
   <div class="container h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-lg-12 col-xl-11">
-        <div class="card text-black mw-auto" style="border-radius: 25px;">
+        <div>
           <div class="card-body">
             <div class="row justify-content-center">
-              <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
+              <div class="col-md-10 col-lg-10 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
+                  class="img-fluid" alt="Sample image">
+              </div>
+
+              <div class="col-md-10 col-lg-6 col-xl-5 order-1 order-lg-2">
                 <p class="text-center h1 fw-bold">Sign up</p>
                   
                   <form method="post" action="{% url 'signup' %}" enctype="multipart/form-data">
@@ -26,7 +31,7 @@
 
                     <div class="form-group">
                         <label for="username">Username</label><br>
-                        <input type="text" value="{{ username }}" class="form-control" id="username" name="username" placeholder="Create A Username (use only letters and numbers)" Required>
+                        <input type="text" value="{{ username }}" class="form-control" id="username" name="username" placeholder="Create A Username" Required>
                     </div>
 
                     <div class="form-group">
@@ -59,11 +64,6 @@
                   </form>
                   </div>
 
-                  <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
-                      class="img-fluid" alt="Sample image">
-                  </div>
-                  
               </div>
             </div>
           </div>
@@ -71,6 +71,15 @@
       </div>
     </div>
   </div>
+  <footer>
+    <div class="d-flex text-white flex-column flex-md-row text-center text-md-start justify-content-between py-1 px-1 px-xl-2 bg-primary">
+      <!-- Copyright -->
+      <div>
+        Copyright © 2023. All rights reserved.
+      </div>
+      <!-- Copyright -->
+    </div>
+  </footer>
 </section>
 
 {% endblock main %}

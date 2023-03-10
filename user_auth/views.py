@@ -8,7 +8,8 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 def home(request):
     """
-    Simpel function that redirect te
+    Simpel function that render the base.html
+    That show the home page of the web application.
     """
     return render(request, "base.html")
 
