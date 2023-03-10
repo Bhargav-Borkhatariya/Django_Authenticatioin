@@ -1,0 +1,48 @@
+{% extends 'dashboard.html' %}
+{% block main %}
+
+{% comment %} Script that trigger when this page load and trigger the editmodal {% endcomment %}
+<script>
+  $(document).ready(function() {
+      $('#myModalBtn').trigger('click');
+  });
+</script>
+
+<!-- Button trigger modal -->
+<button class="hide-me" data-toggle="modal" data-target="#deletebook" id="myModalBtn">
+</button>
+
+<!-- Modal for edit the book-->
+<div class="modal fade" id="deletebook" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Remove Book</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-body">
+          <form method="post" enctype="multipart/form-data" action="{% url 'deletebook' book_field.id %}">
+            {% csrf_token %}
+            <h4>Are You Sure? You want to remove "{{book_field.book_name}}" book.</h4> 
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+  </form>
+</div>
+</div>
+</div>
+
+{% comment %} This script should be after the modal, 
+and that redirect you to the dashboard when close modal close button is click {% endcomment %}
+<script>
+  $('#deletebook').on('hidden.bs.modal', function () {
+    window.location.href = '{% url 'dashboard' %}';
+  });
+</script>
+
+{% endblock main %}

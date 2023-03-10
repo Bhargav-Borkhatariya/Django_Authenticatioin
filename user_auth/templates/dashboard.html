@@ -7,6 +7,10 @@
 {% if user.is_authenticated %} 
 
 <div class="ml-4 mt-4 mr-4">
+  <h3>Hey {{ data }}.......</h3>
+  <div class="slide-in-right">
+    <img src="/media/images/4871.png" style="height: 50px; width: 50px;"/>
+  </div>
 
   {% comment %} This is for showing the msg like succeful and errors. {% endcomment %}
   {% for message in messages %}
@@ -76,7 +80,8 @@
     <tr>
       <th>Name</th>
       <th>Author</th>
-      <th>Price</th>
+      <th>Price</th>      
+      <th style="width: 16%">Cover Page</th>
       <th>Action</th>
     </tr>
   </thead>
@@ -86,17 +91,20 @@
     <tr>
       <td>{{ book.book_name }}</td>
       <td>{{ book.book_author }}</td>
-      <td>{{book.book_price}}</td>
+      <td>{{ book.book_price }}</td>
+      <td align="center"><img class="col-md-10" src="media/{{book.book_image}}" alt="{{book.book_image}}"></td>
       <td>
         <div>
-          {% comment %} Below button redirect you to the editbook with book id {% endcomment %}
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editbook">
+          <!--  Below button redirect you to the editbook with book id -->
+          <button type="button" class="btn btn-primary" >
             <a href="{% url 'editbook' book.id %}" class="text-white">Edit</a>
           </button>
 
-          <button type="button" class="btn btn-primary member">
+          <!--  Below button redirect you to the deletebook with book id -->
+          <button type="button" class="btn btn-primary" >
             <a href="{% url 'deletebook' book.id %}" class="text-white">Remove</a>
           </button>
+
         </div>
         </td>
     </tr>

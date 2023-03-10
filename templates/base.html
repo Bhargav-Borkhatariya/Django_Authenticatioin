@@ -22,13 +22,15 @@
     <div class="topnav">
         <a class="active" href="#">Bhargav-Auth-System :</a>
         {% if user.is_authenticated %}
-        <a href="#">Dashboard</a>          
+        <a href="{% url 'dashboard' %}">Dashboard</a>        
         <a class="test" href="{% url 'signout' %}">sign out</a>
+        <a class='test' href="{% url 'changepass' %}">Change Password</a>
         {% else %}
         <a href="{% url 'signup' %}">Sign Up</a>
         <a href="{% url 'signin' %}">Sign In</a>
         {% endif %}
     </div>
+      
     
     {% comment %} Code for body of the side that will change according to the urls. {% endcomment %}
     {% block main %}

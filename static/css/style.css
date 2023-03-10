@@ -47,3 +47,17 @@
   .jadu {
     margin: 0 auto;
   }
+
+  @keyframes slide-in-right {
+    from {
+      margin-left: 0;
+    }
+    to {
+      margin-left: 95%;
+    }
+  }
+  .slide-in-right {
+    animation-name: slide-in-right;
+    animation-duration: 6s;
+    animation-fill-mode: forwards;
+  }

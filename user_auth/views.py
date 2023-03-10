@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from user_auth.models import CustomUser, Book
+from user_auth.models import User, Book
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -29,16 +29,13 @@ def signup(request):
         email = request.POST.get("email")
         pass1 = request.POST.get("pass1")
         pass2 = request.POST.get("pass2")
-        image = request.FILES.get("image")
 
         # validate and store the msg to the messages object.
         # that we can fetch in our redirected file.
-        if CustomUser.objects.filter(username=username):
-            messages.error(
-                request, "Username already exist!"
-            )
+        if User.objects.filter(username=username):
+            messages.error(request, "Username already exist!")
 
-        if CustomUser.objects.filter(email=email).exists():
+        if User.objects.filter(email=email).exists():
             messages.error(request, "Email Already Registered!!")
 
         if len(username) > 20:
@@ -64,10 +61,9 @@ def signup(request):
             )
 
         # create the user and save to the model.
-        myuser = CustomUser.objects.create_user(username, email, pass1)
+        myuser = User.objects.create_user(username, email, pass1)
         myuser.first_name = fname
         myuser.last_name = lname
-        myuser.image = image
         myuser.save()
         messages.success(request, "Account Created succesfully")
         return redirect("signin")
@@ -118,8 +114,9 @@ def dashboard(request):
     This code render the dashboard page for login user,
     And send that user model object with dashboard page.
     """
+    user = request.user
     books = Book.objects.filter(user=request.user)
-    context = {"books": books}
+    context = {"books": books, "data": user}
     return render(request, "dashboard.html", context)
 
 
@@ -130,14 +127,14 @@ def add_book(request):
     and redirect to the dashboard page.
     """
     if request.method == "POST":
-        book = Book(
-            user=request.user,
-            book_name=request.POST["book-name"],
-            book_author=request.POST["author-name"],
-            book_price=request.POST["book-price"],
-            book_image=request.FILES.get("book-image"),
-        )
-        book.save()
+        book = {
+            "user": request.user,
+            "book_name": request.POST.get("book-name"),
+            "book_author": request.POST.get("author-name"),
+            "book_price": request.POST.get("book-price"),
+            "book_image": request.FILES.get("book-image"),
+        }
+        Book.objects.create(**book)
         messages.success(request, "Book Add Successfully!!")
         return redirect("dashboard")
     else:
@@ -153,17 +150,12 @@ def edit_book(request, id):
     """
     book_fields = Book.objects.get(id=id)
     if request.method == "POST":
-        books = Book(
-            user=request.user,
-            book_name=request.POST.get("book-name"),
-            book_author=request.POST.get("book-author"),
-            book_price=request.POST.get("book-price"),
-            book_image=request.FILES.get("book-image"),
-        )
-        Book.objects.filter(id=id).update(book_name=books.book_name)
-        Book.objects.filter(id=id).update(book_author=books.book_author)
-        Book.objects.filter(id=id).update(book_price=books.book_price)
-        Book.objects.filter(id=id).update(book_image=books.book_image)
+        if request.FILES.get("book-image") is not None:
+            book_fields.book_image = request.FILES.get("book-image")
+        book_fields.book_name = request.POST.get("book-name")
+        book_fields.book_author = request.POST.get("book-author")
+        book_fields.book_price = request.POST.get("book-price")
+        book_fields.save()
         messages.success(request, "Data Updated Successfully!!")
         return redirect("dashboard")
     else:
@@ -176,6 +168,31 @@ def delete_book(request, id):
     Just destroy the particular book all fiel by using its id.
     """
     Books = Book.objects.get(id=id)
-    Books.delete()
-    messages.success(request, "Book Deleted Succesfully!!")
-    return redirect("dashboard")
+    if request.method == "POST":
+        Books.delete()
+        messages.success(request, "Book Deleted Succesfully!!")
+        return redirect("dashboard")
+    else:
+        return render(request, "deletebook.html", {"book_field": Books})
+
+
+@login_required
+def changepass(request):
+    error_messages = []
+
+    if request.method == "POST":
+        current_password = request.user.password
+        old_password = request.POST.get("old_password")
+        new_password1 = request.POST.get("new_password1")
+
+        if not request.user.check_password(old_password):
+            error_messages.append("The old password you entered is incorrect.")
+        else:
+            request.user.set_password(new_password1)
+            request.user.save()
+            messages.success(request, "Password Changed Successfully!!")
+            return redirect("signin")
+
+    current_password = request.user.password
+    context = {"current_password": current_password, "error_messages": error_messages}
+    return render(request, "changepass.html", context)
