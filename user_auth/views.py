@@ -165,7 +165,7 @@ def edit_book(request, id):
 @login_required
 def delete_book(request, id):
     """
-    Just destroy the particular book all fiel by using its id.
+    Just destroy the particular book all fields by using its id.
     """
     Books = Book.objects.get(id=id)
     if request.method == "POST":
@@ -178,10 +178,13 @@ def delete_book(request, id):
 
 @login_required
 def changepass(request):
+    """
+    fetch the old_password and new password from form.
+    Use old password for verifying and new pass for updating.
+    If old pass match then allow to set password.
+    """
     error_messages = []
-
     if request.method == "POST":
-        current_password = request.user.password
         old_password = request.POST.get("old_password")
         new_password1 = request.POST.get("new_password1")
 
@@ -193,6 +196,5 @@ def changepass(request):
             messages.success(request, "Password Changed Successfully!!")
             return redirect("signin")
 
-    current_password = request.user.password
-    context = {"current_password": current_password, "error_messages": error_messages}
+    context = {"error_message": error_messages}
     return render(request, "changepass.html", context)
